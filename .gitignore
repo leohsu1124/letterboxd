@@ -1,0 +1,16 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtualenv
+venv/
+.env/
+
+# macOS
+.DS_Store
+
+# Data / outputs
+data/
+*.csv
