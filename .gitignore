@@ -14,3 +14,9 @@ venv/
 # Data / outputs
 data/
 *.csv
+
+# Secrets
+api_keys/
+
+app/__init__.py
+app/recommendation/__init__.py
