@@ -1,8 +1,10 @@
 import pandas as pd
 from typing import TypedDict, Optional, Any
 
+
 class Movie(TypedDict):
     name: str
+    year: int
     rating: float
 
 def data_loadmap() -> dict[str,list[Movie]]:
@@ -18,9 +20,12 @@ def data_loadmap() -> dict[str,list[Movie]]:
         date = row['Date']
         name = row['Name']
         rating = row['Rating']
+        year = row['Year']
 
         if date not in movies:
             movies[date] = []
-        movies[date].append({'name':name,'rating':rating})
+        movies[date].append({'name':name,'year':year,'rating':rating})
 
     return movies
+
+movies = data_loadmap()
