@@ -6,7 +6,7 @@ tmdb.API_KEY = API_KEY
 
 
 def data_loadmap():
-    df = pd.read_csv('data/ratings.csv')
+    df = pd.read_csv('letterboxd_data/ratings.csv')
     print(df.head())
     
 data_loadmap()

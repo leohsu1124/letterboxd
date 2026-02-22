@@ -4,29 +4,7 @@ from typing import TypedDict, Optional, Any
 from PIL import Image, ImageDraw, ImageFont
 import os, sys
 
-class Movie(TypedDict):
-    name: str
-    rating: float
-
-def data_loadmap() -> dict[str,list[Movie]]:
-    df = pd.read_csv('data/ratings.csv')
-    print(df.head())
-
-    df['Date'] = pd.to_datetime(df['Date'],errors='coerce').dt.date.astype(str)
-    df = df.dropna(subset=['Date'])
-
-    movies: dict[str,list[Movie]] = {}
-
-    for _, row in df.iterrows():
-        date = row['Date']
-        name = row['Name']
-        rating = row['Rating']
-
-        if date not in movies:
-            movies[date] = []
-        movies[date].append({'name':name,'rating':rating})
-
-    return movies
+from data.data_mapper import Movie, data_loadmap
 
 def create_image(bucket_info: dict[float, list[Movie]], count: int, scale: int):
     # Dimensions of the frames and GIF
@@ -177,7 +155,7 @@ def create_and_save_animation(movies: dict[str, list[Movie]]):
         duplicated_frames.extend([frame] * num_repetitions)
 
     # Save the frames as an animated mp4
-    imageio.mimsave(os.path.join(os.path.dirname(__file__), 'animation.mp4'), duplicated_frames * num_loops, fps=fps * scale_effect)
+    imageio.mimsave(os.path.join(os.path.dirname(__file__), 'animation.gif'), duplicated_frames * num_loops, duration=20)
 
 # Example usage
 movies = data_loadmap()

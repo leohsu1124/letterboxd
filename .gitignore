@@ -12,8 +12,8 @@ venv/
 .DS_Store
 
 # Data / outputs
-data/
-*.csv
+data/letterboxd_data
+
 
 # Secrets
 api_keys/
