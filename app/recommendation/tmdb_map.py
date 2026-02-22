@@ -7,10 +7,8 @@ from dataclasses import dataclass
 from typing import Optional, Dict, Any
 import pandas as pd
 import tmdbsimple as tmdb
-from app.api_keys.tmdb_api import API_KEY
-from tmdbsimple import Search
 
-from data.data_mapper import Movie, data_loadmap
+from app.api_keys.tmdb_api import API_KEY
 
 # Configs 
 CACHE_PATH = "data/tmdb_cache.json"   # title|year -> best match payload
