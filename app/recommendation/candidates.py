@@ -146,6 +146,8 @@ if __name__ == '__main__':
     liked_ids = set(state.liked_ids)
     seen_ids = set(state.seen_ids)
     
+    print(len(state.liked_ids),len(state.seen_ids))
+    
     candidates_df = build_candidates(liked_ids=liked_ids, seen_ids=seen_ids, max_seed=200, 
                                      pages_per_seed=1, popular_pages=3)
     
