@@ -143,13 +143,9 @@ def map_ratings_to_tmdb(df: pd.DataFrame) -> pd.DataFrame:
     save_cache(CACHE_PATH, cache)
     return out
 
-
-if __name__ == '__main__':
-    tmdb.API_KEY = API_KEY
-    
-    df = pd.read_csv('data/letterboxd_data/ratings.csv')
+def tmdb_map_review(df: pd.DataFrame,title):
     mapped = map_ratings_to_tmdb(df)
-    mapped.to_csv('data/letterboxd_ratings_mapped.csv',index=False)
+    mapped.to_csv(f'data/{title}.csv',index=False)
     
     print(mapped["tmdb_status"].value_counts(dropna=False))
     print("Mapped %:", (mapped["tmdb_status"] == "mapped").mean())
@@ -159,5 +155,14 @@ if __name__ == '__main__':
     # write review file for low confidence matches
     review = mapped[mapped["tmdb_status"] == "low_conf"][["Name", "Year", "tmdb_id", "tmdb_match_title", "tmdb_match_year", "tmdb_match_score", "Letterboxd URI"]]
     if len(review) > 0:
-        review.to_csv("data/tmdb_needs_review.csv", index=False)
-        print(f"Wrote {len(review)} low-confidence matches to data/tmdb_needs_review.csv")
+        review.to_csv(f"data/{title}_review.csv", index=False)
+        print(f"Wrote {len(review)} low-confidence matches to data/{title}_review.csv")
+
+if __name__ == '__main__':
+    tmdb.API_KEY = API_KEY
+    
+    df_ratings = pd.read_csv('data/letterboxd_data/ratings.csv')
+    tmdb_map_review(df_ratings,title='letterboxd_ratings_mapped')
+    
+    df_watched = pd.read_csv('data/letterboxd_data/watched.csv')
+    tmdb_map_review(df_watched,title='letterboxd_watched_mapped')
