@@ -1,8 +1,10 @@
-## Next Watch (w/ Leo's Letterboxd)
+## Next Watch (w/ Letterboxd)
+
+This project was inspired by my curiousity of recommendation systems ever since I learned about them in a machine learning course at CMU. It's that and another great excuse to watch more movies!
 
 Since the process for getting a [Letterboxd API](https://api-docs.letterboxd.com/) rather tedious, I opted to use a _(new-ish??)_ extract personal data feature.
 
-To ensure I had a grasp on the data extracted, I made a time-lapse animation based on my own ratings (423 movies / 1,104 watched at time of writing).
+To ensure I had a grasp on the data extracted, I made a time-lapse animation based on my own ratings (423 movies / 1,104 watched at time of writing) inspired by [@dado3212](https://github.com/dado3212/letterboxd-scripts/tree/main).
 
 ![animation](/animation/animation.gif)
 
@@ -23,6 +25,8 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
    The goal of generating a candidates pool is to define what movies I _could_ recommend from. Because of the size of the TMDB dataset, we won't score "all movies" but rather build a pool that we can score efficiently.
 
    For each movie rated ≥4.0 on my Letterboxd, I'll pull from (Set A) `/movie/{id}/recommendations` and `/movie/{id}/similar`. Additionally, I'll also pull from (Set B) `/movie/popular` as a fallback pool to round out our candidate selections. Then, I have `(A ∪ B) - Watched`, knowing that rated is subset of the watched set.
+
+   Now, we have a candidates dataframe that has about ~3100 movies. A good sanity check is that the movies aren't all from the same genre or just franchise sequels/remakes.
 
 ---
 
