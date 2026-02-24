@@ -18,7 +18,7 @@ def create_image(bucket_info: dict[float, list[Movie]], count: int, scale: int):
 
     # Draw the ratings text
     text = 'RATINGS'
-    font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), '..', 'resources', 'fonts', 'Graphik-Regular-Web.woff'), size=13 * scale)
+    font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), '..', 'resources', 'fonts', 'Graphik-Regular-Web.woff'), size=12 * scale)
     text_bbox = draw.textbbox((0, 0), text, font=font)
     text_start_height = text_bbox[1]
     text_height = text_bbox[3]
@@ -26,7 +26,7 @@ def create_image(bucket_info: dict[float, list[Movie]], count: int, scale: int):
 
     # Draw the number of reviews text
     text = str(count)
-    font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), '..', 'resources', 'fonts', 'Graphik-Regular-Web.woff'), size=11 * scale)
+    font = ImageFont.truetype(os.path.join(os.path.dirname(__file__), '..', 'resources', 'fonts', 'Graphik-Regular-Web.woff'), size=10 * scale)
     text_bbox = draw.textbbox((0, 0), text, font=font)
 
     draw.text((width - text_bbox[2] - 1 * scale, text_start_height + text_height - text_bbox[3]), text, font=font, fill='#678')
@@ -154,8 +154,8 @@ def create_and_save_animation(movies: dict[str, list[Movie]]):
             num_repetitions = int(fps * scale_effect * final_frame_duration)
         duplicated_frames.extend([frame] * num_repetitions)
 
-    # Save the frames as an animated mp4
-    imageio.mimsave(os.path.join(os.path.dirname(__file__), 'animation.gif'), duplicated_frames * num_loops, duration=20)
+    # Save the frames as an animated mp4 (remember to pip install imageio-ffmpeg)
+    imageio.mimsave(os.path.join(os.path.dirname(__file__), 'animation.mp4'), duplicated_frames * num_loops, fps=fps * scale_effect)
 
 # Example usage
 movies = data_loadmap()
