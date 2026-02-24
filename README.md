@@ -12,10 +12,26 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
    Started off by importing my `ratings.csv` into a table in order to build an ID resolution step & map each rated movie to its `tmdb_id` in the [TMDB](https://www.themoviedb.org/) dataset. We can utilize the [TMDB API](https://developer.themoviedb.org/docs/getting-started) to implement the mapping with a `title + year` search (TMDB `/search/movie`) and if needed, can distinguish through features like movie release year, runtime, etc.
 
+   We also want to do the same thing to the `watched.csv` for future cross-reference purposes and eliminate any recommendations that are movies seen but not rated.
+
+   After generating a mapped ratings and a mapped watch dataframes, we had a matched percentage of 98.35% and 95.83%, with 0% ambiguous on both, and 1.65% and 4.17% failed mappings respectively. Upon closer inspection, this is due to certain TV shows rated that aren't part of the movie dataset, allowing to simply ignore them :)
+
 ---
 
-- PHASE 2: MOVIE CANDIDATES
-- PHASE 3: MVP RECOMMENDER
-- PHASE 4: OFFLINE RECCS
-- PHASE 5: LEARNED RERANKER
-- PHASE 6: SYSTEMIZATION
+2. **Candidates Generation**
+
+---
+
+3. **MVP Recommender**
+
+---
+
+4. **Offline Recs**
+
+---
+
+5. **Learned Reranker**
+
+---
+
+6. **Systemization**
