@@ -20,21 +20,23 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
 ---
 
-2. **Candidates Generation**
+2.  **Candidates Generation**
 
-   The goal of generating a candidates pool is to define what movies I _could_ recommend from. Because of the size of the TMDB dataset, we won't score "all movies" but rather build a pool that we can score efficiently.
+    The goal of generating a candidates pool is to define what movies I _could_ recommend from. Because of the size of the TMDB dataset, we won't score "all movies" but rather build a pool that we can score efficiently.
 
-   For each movie rated ≥4.0 on my Letterboxd, I'll pull from (Set A) `/movie/{id}/recommendations` and `/movie/{id}/similar`. Additionally, I'll also pull from (Set B) `/movie/popular` as a fallback pool to round out our candidate selections. Then, I have `(A ∪ B) - Watched`, knowing that rated is subset of the watched set.
+    For each movie rated ≥4.0 on my Letterboxd, I'll pull from (Set A) `/movie/{id}/recommendations` and `/movie/{id}/similar`. Additionally, I'll also pull from (Set B) `/movie/popular` as a fallback pool to round out our candidate selections. Then, I have `(A ∪ B) - Watched`, knowing that rated is subset of the watched set.
 
-   However, after fine-tuning some parameters, I could only get a candidate pool of about ~3200 movies. Hoping for more, I implemented a discover function, where it should introduce slight entropy in the system. The following are the different discovery avenues included:
+    However, after fine-tuning some parameters, I could only get a candidate pool of about ~3200 movies. Hoping for more, I implemented a discover function, where it should introduce slight entropy in the system. The following are the different discovery avenues included:
 
-   `DISCOVER_SPECS = [
-    {"name": "mid_depth_votes", "sort_by": "vote_count.desc", "vote_count_gte": 200, "page_start": 30, "pages": 75},
-    {"name": "high_quality", "sort_by": "vote_average.desc", "vote_count_gte": 2000, "page_start": 1, "pages": 100},
-    {"name": "recent_releases", "sort_by": "primary_release_date.desc", "vote_count_gte": 50, "page_start": 1, "pages": 25},
-]`
+    > DISCOVER_SPECS = [
 
-   Now, we have a candidates dataframe that has about ~3100 movies. A good sanity check is that the movies aren't all from the same genre or just franchise sequels/remakes.
+        {"name": "mid_depth_votes", "sort_by": "vote_count.desc", "vote_count_gte": 200, "page_start": 30, "pages": 75},
+        {"name": "high_quality", "sort_by": "vote_average.desc", "vote_count_gte": 2000, "page_start": 1, "pages": 100},
+        {"name": "recent_releases", "sort_by": "primary_release_date.desc", "vote_count_gte": 50, "page_start": 1, "pages": 25},
+
+    ]
+
+    Now, we have a candidates dataframe that has about ~3100 movies. A good sanity check is that the movies aren't all from the same genre or just franchise sequels/remakes.
 
 ---
 
