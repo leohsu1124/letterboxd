@@ -12,7 +12,7 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
 1. **Data Foundations**
 
-   Started off by importing my `ratings.csv` into a table in order to build an ID resolution step & map each rated movie to its `tmdb_id` in the [TMDB](https://www.themoviedb.org/) dataset. We can utilize the [TMDB API](https://developer.themoviedb.org/docs/getting-started) to implement the mapping with a `title + year` search (TMDB `/search/movie`) and if needed, can distinguish through features like movie release year, runtime, etc.
+   Started off by importing my `ratings.csv` into a table in order to build an ID resolution step & map each rated movie to its `tmdb_id` in the [TMDB](https://www.themoviedb.org/) dataset. We can utilize the [TMDB API](https://developer.themoviedb.org/docs/getting-started) to implement the mapping with a `title + year` search (TMDB `/search/movie`) and if needed, can distinguish through features like movie release year, runtime, etc. I personally opted for the [TMDBSimple](https://github.com/celiao/tmdbsimple) wrapper for convenience.
 
    We also want to do the same thing to the `watched.csv` for future cross-reference purposes and eliminate any recommendations that are movies seen but not rated.
 
@@ -40,7 +40,11 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
 ---
 
-3. **MVP Recommender**
+3. **MVP Recommender (No Training)**
+
+   The goal for the MVP Recommender is to produce _immediate_ good Top-K (`k = 10`) recommendations with explainability. In order to do so, we can treat movies rated ≥4.0 as my liked set and create a preference vector using movie features like genres, cast, director, keywords, etc.
+
+   From each candidate, we'll have a scoring function as a simple way to determine recommendation.
 
 ---
 
