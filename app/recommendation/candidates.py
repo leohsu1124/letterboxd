@@ -215,5 +215,5 @@ if __name__ == '__main__':
     candidates_df = build_candidates(liked_ids=liked_ids, seen_ids=seen_ids, max_seed=200, 
                                      pages_per_seed=3, popular_pages=10, discover_specs=DISCOVER_SPECS)
     
-    candidates_df.to_csv("data/candidates.parquet", index=False)
+    candidates_df.to_parquet("data/candidates.parquet", index=False)
     print("Candidates:", len(candidates_df))
