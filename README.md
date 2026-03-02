@@ -48,40 +48,42 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
 ---
 
-4. **Offline Recs**
+4.  **Offline Recs**
 
-   The goal is to build a rigorous offline evaluation to compare recommender configs and fine-tune feature weights to be confident recommendations are _quantitatively_ better in this model.
+    The goal is to build a rigorous offline evaluation to compare recommender configs and fine-tune feature weights to be confident recommendations are _quantitatively_ better in this model.
 
-   Since ratings are sorted chronologically, our train/test split is a 80%/20% split of the liked set. By construction, tests postives aren't built into the candidate pool as it excludes all seen movies by default. The scoring builds a liked feature matrix from train-only liked movies, scoring all candidates (including injected test movies) using the scoring pipeline.
+    Since ratings are sorted chronologically, our train/test split is a 80%/20% split of the liked set. By construction, tests postives aren't built into the candidate pool as it excludes all seen movies by default. The scoring builds a liked feature matrix from train-only liked movies, scoring all candidates (including injected test movies) using the scoring pipeline.
 
-   We're judging on the metrics of:
-   - **nDCG@k:** Normalized Discounted Cumulative Gain: Are test positives ranked high?
-   - **Recall@k:** What fraction of test positives in the top-k?
-   - **Hit Rate@k:** Did at least one test positive make the top-k?
-   - **Catalog Coverage@k:** What fraction of the candidate pool appears in the top 100?
-   - **Novelty@k:** Mean self-information of recommendations (higher = less popular)
+    We're judging on the metrics of:
+    - **nDCG@k:** Normalized Discounted Cumulative Gain: Are test positives ranked high?
+    - **Recall@k:** What fraction of test positives in the top-k?
+    - **Hit Rate@k:** Did at least one test positive make the top-k?
+    - **Catalog Coverage@k:** What fraction of the candidate pool appears in the top 100?
+    - **Novelty@k:** Mean self-information of recommendations (higher = less popular)
 
-   ![plot](/pics/sweep_progress.png)
+    ![plot](/pics/sweep_progress.png)
 
-   Fine-tuning are done through progressive sweeps, a grid search over feature weights and train fractions. Supports `--sweep` from CLI. Testing roughly 500 configs, we found that `director_weight` played a significant role in breakthroughs for our metrics whereas `cast_weight` was irrelevant, thus defaulting at 0.0. `keyword_weight` ≥ 2.0 tripled our Recall@50 compared to when `keyword_weight = 1.0`. Further investigation revealed a tradeoff, nDCG saturates at `keyword_weight = 5.0` while Recall peaks at `keyword_weight = 3.0`.
+    Fine-tuning are done through progressive sweeps, a grid search over feature weights and train fractions. Supports `--sweep` from CLI. Testing roughly 500 configs, we found that `director_weight` played a significant role in breakthroughs for our metrics whereas `cast_weight` was irrelevant, thus defaulting at 0.0. `keyword_weight` ≥ 2.0 tripled our Recall@50 compared to when `keyword_weight = 1.0`. Further investigation revealed a tradeoff, nDCG saturates at `keyword_weight = 5.0` while Recall peaks at `keyword_weight = 3.0`.
 
-   ![plot](/pics/keyword_weight.png)
+    ![plot](/pics/keyword_weight.png)
 
-   Because of the trade-off, we performed an additional sweep altering director and keyword weighting while `cast_weight = 0.0`.
+    Because of the trade-off, we performed an additional sweep altering director and keyword weighting while `cast_weight = 0.0`.
 
-   ![plot](/pics/director_keyword_heatmap.png)
+    ![plot](/pics/director_keyword_heatmap.png)
 
-   The final configs:
+    The final configs:
 
-   > cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
+    > cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
 
-   **How Does It Translate for Our Recommendations**
+         cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
 
-   Our evaluation reveals that preferences are driven by thematic content (keywords) and who directed the film, regardless of the actors appearing. The original (Step 3) recommendations biases are often determined along the lines of _"You liked Marvel so here's more Marvel."_
+    **How Does It Translate for Our Recommendations**
 
-   With tuned weights, recommendations and the overall model favors thinking like _"You liked Parasite (2019) so here's more films about class struggle."_ over _"You liked a film starring Brad Pitt so here's more films with Brad Pitt."_
+    Our evaluation reveals that preferences are driven by thematic content (keywords) and who directed the film, regardless of the actors appearing. The original (Step 3) recommendations biases are often determined along the lines of _"You liked Marvel so here's more Marvel."_
 
-   However, a practical aspect worth noting is that our final configs produces Recall@50 = 0.161, meaning the system would surface roughly 5 out of 31 future favorites in a top-50 list. Certain movies, classics like _Jaws_ and _Lord of the Rings_ or less-known discoveries like _Godland_, are inherently hard ot predict from prior viewing patterns. The final configs was also determined with this in mind as we didn't want to overfit.
+    With tuned weights, recommendations and the overall model favors thinking like _"You liked Parasite (2019) so here's more films about class struggle."_ over _"You liked a film starring Brad Pitt so here's more films with Brad Pitt."_
+
+    However, a practical aspect worth noting is that our final configs produces Recall@50 = 0.161, meaning the system would surface roughly 5 out of 31 future favorites in a top-50 list. Certain movies, classics like _Jaws_ and _Lord of the Rings_ or less-known discoveries like _Godland_, are inherently hard ot predict from prior viewing patterns. The final configs was also determined with this in mind as we didn't want to overfit.
 
 ---
 
