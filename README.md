@@ -36,15 +36,15 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
     This ensures that we discover movies with the most recent release dates, the most highly voted movies on average, and also movies with most vote counts. However, you'll notice that for the vote_counts, we started at page 30 as we realized the pages before that often had tons of overlap.
 
-    Now, we have a candidates dataframe that has about ~8600 movies. A good sanity check is that the movies aren't all from the same genre or just franchise sequels/remakes.
+    Now, we have a candidates dataframe that has about ~8850 movies. A good sanity check is that the movies aren't all from the same genre or just franchise sequels/remakes.
 
 ---
 
 3. **MVP Recommender (No Training)**
 
-   The goal for the MVP Recommender is to produce _immediate_ good Top-K (`k = 10`) recommendations with explainability. In order to do so, we can treat movies rated ≥4.0 as my liked set and create a preference vector using movie features like genres, cast, director, keywords, etc.
+   The goal for the MVP Recommender is to produce _immediate_ good Top-K (`k = 10`) recommendations with explainability. In order to do so, we can fetch the top 5 cast members, director, and keywords for all candidates and liked movies set (movies rated ≥4.0) from TMDB. Then, create a preference sparse feature matrix by stacking features genres (3x weight), director (2x), keywords (1x), cast (0.5x), and [tf-idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) on overview (0.3x).
 
-   From each candidate, we'll have a scoring function as a simple way to determine recommendation.
+   From each candidate, we'll score via cosine similarity against liked set (mean over top-20), add a log-popularity prior (5%), and [MMR](https://arxiv.org/html/2503.13881v1) reranks to ensure diversity. Personally, I threw in a genre cap of 3 also for diversity and a superhero cap discriminator to downplay my bias for more comic-related movies within the liked set. Filters out candidates with fewer than 300 votes. Adding explanation generations by finding which movies in liked set drove the recommendations and what features they might share (ie. "Because you liked X and Y / directed by Z / features A, B")
 
 ---
 
