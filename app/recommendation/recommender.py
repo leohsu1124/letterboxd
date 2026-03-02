@@ -226,11 +226,13 @@ def recommend(k: int = 10,
     candidate_matrix, candidate_ids = load_candidate_matrix(matrix_path, meta_path)
     liked_matrix,     _             = load_liked_matrix(liked_matrix_path, liked_meta_path)
     candidates_df = pd.read_parquet(candidates_path)
-    enriched_df   = pd.read_parquet(enriched_path)[["tmdb_id", "keywords_list"]]
+    enriched_df   = pd.read_parquet(enriched_path)[["tmdb_id", "keywords_list", "cast_list", "director"]]
 
-    # bring in keywords for superhero detection
+    # bring in keywords, cast, director for explainer and superhero detection
     candidates_df = candidates_df.merge(enriched_df, on="tmdb_id", how="left")
     candidates_df["keywords_list"] = candidates_df["keywords_list"].fillna("")
+    candidates_df["cast_list"]     = candidates_df["cast_list"].fillna("")
+    candidates_df["director"]      = candidates_df["director"].fillna("")
 
     # align candidates_df rows to match matrix row order
     id_to_idx = {tid: i for i, tid in enumerate(candidate_ids)}
@@ -275,7 +277,7 @@ def recommend(k: int = 10,
     return results[[
         "tmdb_id", "title", "release_date", "poster_path", "overview",
         "sim_score", "final_score", "genre_ids", "keywords_list",
-        "seed_count", "rec_hits", "sim_hits",
+        "cast_list", "director", "seed_count", "rec_hits", "sim_hits",
     ]].reset_index(drop=True)
 
 
