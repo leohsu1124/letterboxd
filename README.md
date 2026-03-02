@@ -76,6 +76,7 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
    > cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
 
    **How Does It Translate for Our Recommendations**
+
    Our evaluation reveals that preferences are driven by thematic content (keywords) and who directed the film, regardless of the actors appearing. The original (Step 3) recommendations biases are often determined along the lines of _"You liked Marvel so here's more Marvel."_
 
    With tuned weights, recommendations and the overall model favors thinking like _"You liked Parasite (2019) so here's more films about class struggle."_ over _"You liked a film starring Brad Pitt so here's more films with Brad Pitt."_
