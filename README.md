@@ -73,7 +73,7 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
     The final configs:
 
-    > cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
+    >
 
          cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
 
