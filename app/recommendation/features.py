@@ -14,9 +14,9 @@ FEATURE_META_PATH  = "data/feature_meta.json"
 # Per-block weights applied before stacking
 # Higher = more influence on cosine similarity
 GENRE_WEIGHT    = 3.0   # small vocab, very reliable signal
-DIRECTOR_WEIGHT = 2.0   # strong auteur signal
-KEYWORD_WEIGHT  = 1.0   # baseline
-CAST_WEIGHT     = 0.5   # 23k features — reduce outsized influence
+DIRECTOR_WEIGHT = 10.0   # strong auteur signal
+KEYWORD_WEIGHT  = 3.0   # baseline
+CAST_WEIGHT     = 0.0   # 23k features — reduce outsized influence
 
 
 # --- Loaders ---
