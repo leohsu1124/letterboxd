@@ -49,6 +49,19 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 ---
 
 4. **Offline Recs**
+   THe goal is to build a rigorous offline evaluation to compare recommender configs and fine-tune feature weights to be confident recommendations are _quantitatively_ better in this model.
+
+   Since ratings are sorted chronologically, our train/test split is a 80%/20% split of the liked set. By construction, tests postives aren't built into the candidate pool as it excludes all seen movies by default. The scoring builds a liked feature matrix from train-only liked movies, scoring all candidates (including injected test movies) using the scoring pipeline.
+
+   We're judging on the metrics of:
+   - **nDCG@k:** Normalized Discounted Cumulative Gain: Are test positives ranked high?
+   - **Recall@k:** What fraction of test positives in the top-k?
+   - **Hit Rate@k:** Did at least one test positive make the top-k?
+   - **Recall@k:** What fraction of the candidate pool appears in the top 100?
+   - **Recall@k:** Mean self-information of recommendations (higher = less popular)
+
+   Fine-tuning are done through progressive sweeps, a grid search over feature weights and train fractions. Supports `--sweep` from CLI. Testing roughly 500 configs, we found that `director_weight` played a significant role in breakthroughs for our metrics whereas `cast_weight` was irrelevant, thus defaulting at 0.0. `keyword_weight` ≥ 2.0 tripled our Recall@50 compared to when `keyword_weight = 1.0`. Further investigation revealed a tradeoff, nDCG saturates at `keyword_weight = 5.0` while Recall peaks at `keyword_weight = 3.0`. The following are plots that help illustrate our fine-tune investigation.
+
    ![plot](/pics/sweep_progress.png)
    ![plot](/pics/keyword_weight.png)
    ![plot](/pics/director_keyword_heatmap.png)
