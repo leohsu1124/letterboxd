@@ -46,6 +46,10 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
    From each candidate, we'll score via cosine similarity against liked set (mean over top-20), add a log-popularity prior (5%), and [MMR](https://arxiv.org/html/2503.13881v1) reranks to ensure diversity. Personally, I threw in a genre cap of 3 also for diversity and a superhero cap discriminator to downplay my bias for more comic-related movies within the liked set. Filters out candidates with fewer than 300 votes. Adding explanation generations by finding which movies in liked set drove the recommendations and what features they might share (ie. _"Because you liked X and Y / directed by Z / features A, B"_)
 
+   **Generated Top-10 Recommendations (w/ MVP)**
+
+   ![recs](/pics/mvp_recommender_top10recs.png)
+
 ---
 
 4.  **Offline Recs**
@@ -75,7 +79,7 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 
     >
 
-         cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
+          cast_weight = 0.0, director_weight = 10.0, keyword_weight = 3.0, genre_weight = 3.0, tfidf_weight = 0.3
 
     **How Does It Translate for Our Recommendations**
 
@@ -84,6 +88,10 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
     With tuned weights, recommendations and the overall model favors thinking like _"You liked Parasite (2019) so here's more films about class struggle."_ over _"You liked a film starring Brad Pitt so here's more films with Brad Pitt."_
 
     However, a practical aspect worth noting is that our final configs produces Recall@50 = 0.161, meaning the system would surface roughly 5 out of 31 future favorites in a top-50 list. Certain movies, classics like _Jaws_ and _Lord of the Rings_ or less-known discoveries like _Godland_, are inherently hard ot predict from prior viewing patterns. The final configs was also determined with this in mind as we didn't want to overfit.
+
+    **Generated Top-10 Recommendations (w/ Final Configs)**
+
+    ![recs](/pics/offline_val_top10recs.png)
 
 ---
 
