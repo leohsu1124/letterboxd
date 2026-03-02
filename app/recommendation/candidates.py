@@ -168,6 +168,7 @@ def build_candidates(liked_ids: set[int], seen_ids: set[int], max_seed: int = 20
             "vote_count": item.get("vote_count"),
             "overview": item.get("overview"),
             "poster_path": item.get("poster_path"),
+            "genre_ids": item.get("genre_ids", []),
             "rec_hits": prov["rec_hits"],
             "sim_hits": prov["sim_hits"],
             "discover_hits": prov["discover_hits"],

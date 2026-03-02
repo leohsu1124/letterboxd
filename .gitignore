@@ -16,7 +16,7 @@ data/letterboxd_data
 
 data/*.csv
 data/*.parquet
-
+data/*.npz
 # Secrets
 api_keys/
 
