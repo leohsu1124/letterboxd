@@ -96,7 +96,3 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 ---
 
 5. **Learned Reranker**
-
----
-
-6. **Systemization**
