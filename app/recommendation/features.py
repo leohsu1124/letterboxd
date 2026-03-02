@@ -7,9 +7,16 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Configs
 TFIDF_MAX_FEATURES = 5000        # cap vocabulary size for overview TF-IDF
-TFIDF_WEIGHT       = 0.5         # scale TF-IDF block relative to binary features
+TFIDF_WEIGHT       = 0.3         # scale TF-IDF block (reduced — overview text is generic)
 FEATURE_CACHE_PATH = "data/feature_matrix.npz"
 FEATURE_META_PATH  = "data/feature_meta.json"
+
+# Per-block weights applied before stacking
+# Higher = more influence on cosine similarity
+GENRE_WEIGHT    = 3.0   # small vocab, very reliable signal
+DIRECTOR_WEIGHT = 2.0   # strong auteur signal
+KEYWORD_WEIGHT  = 1.0   # baseline
+CAST_WEIGHT     = 0.5   # 23k features — reduce outsized influence
 
 
 # --- Loaders ---
@@ -149,6 +156,13 @@ def build_feature_matrix(df: pd.DataFrame) -> tuple[sp.csr_matrix, list[str], di
     dir_mat,      dir_names,      dir_vocab    = _build_director_block(df)
     tfidf_mat,    tfidf_names,    tfidf_vec    = _build_tfidf_block(df)
 
+    # apply per-block weights before stacking
+    genre_mat  = genre_mat  * GENRE_WEIGHT
+    cast_mat   = cast_mat   * CAST_WEIGHT
+    dir_mat    = dir_mat    * DIRECTOR_WEIGHT
+    kw_mat     = kw_mat     * KEYWORD_WEIGHT
+    # tfidf already weighted internally via TFIDF_WEIGHT
+
     matrix = sp.hstack([genre_mat, cast_mat, dir_mat, kw_mat, tfidf_mat], format="csr")
     feature_names = genre_names + cast_names + dir_names + kw_names + tfidf_names
 
@@ -183,6 +197,12 @@ def encode_liked(liked_df: pd.DataFrame, encoders: dict) -> sp.csr_matrix:
     kw_mat,     _, _ = _build_binary_block(liked_df, "keywords_list", mlb=encoders["kw_mlb"],    prefix="kw:")
     dir_mat,    _, _ = _build_director_block(liked_df, known_directors=encoders["dir_vocab"])
     tfidf_mat,  _, _ = _build_tfidf_block(liked_df, vectorizer=encoders["tfidf_vec"])
+
+    # apply same weights as candidate matrix
+    genre_mat = genre_mat * GENRE_WEIGHT
+    cast_mat  = cast_mat  * CAST_WEIGHT
+    dir_mat   = dir_mat   * DIRECTOR_WEIGHT
+    kw_mat    = kw_mat    * KEYWORD_WEIGHT
 
     return sp.hstack([genre_mat, cast_mat, dir_mat, kw_mat, tfidf_mat], format="csr")
 
