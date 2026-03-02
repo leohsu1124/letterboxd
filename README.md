@@ -49,6 +49,9 @@ To ensure I had a grasp on the data extracted, I made a time-lapse animation bas
 ---
 
 4. **Offline Recs**
+   ![plot](/pics/sweep_progress.png)
+   ![plot](/pics/keyword_weight.png)
+   ![plot](/pics/director_keyword_heatmap.png)
 
 ---
 
